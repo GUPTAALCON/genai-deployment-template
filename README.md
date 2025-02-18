@@ -1,1 +1,1 @@
-# mds-genai-ms-lens-formulation
+# genai-deployment-template
