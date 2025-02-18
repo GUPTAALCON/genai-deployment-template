@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 from azure.storage.blob import BlobServiceClient
-import fitz  # PyMuPDF (if needed for other uses)
+# import fitz  # PyMuPDF (if needed for other uses)
 from concurrent.futures import ThreadPoolExecutor
 import time
 import json
@@ -11,8 +11,9 @@ from datetime import datetime
 from nltk.tokenize import word_tokenize
 from nltk.tag import pos_tag
 import nltk
+import ssl
 from openai import AzureOpenAI
-from flasgger import Swagger, swag_from
+# from flasgger import Swagger, swag_from
 import logging
 import re
 from azure.ai.formrecognizer import DocumentAnalysisClient
@@ -24,13 +25,26 @@ import os
 # Configure logging with INFO level
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Download required NLTK resources.
-nltk.download("punkt")
-nltk.download("averaged_perceptron_tagger")
+
+
+ 
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+# Download required NLTK resources. 
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+
+
+
 
 # Initialize the Flask app and Swagger documentation.
 app = Flask(__name__)
-swagger = Swagger(app)
+# swagger = Swagger(app)
 
 # ---------------------
 # Global Configuration Variables
